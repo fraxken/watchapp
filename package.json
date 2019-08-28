@@ -10,7 +10,17 @@
     "type": "git",
     "url": "git+https://github.com/fraxken/watchapp.git"
   },
-  "keywords": [],
+  "keywords": [
+      "watch",
+      "app",
+      "restart",
+      "reload",
+      "hot",
+      "autoreload",
+      "monitor",
+      "dev",
+      "terminal"
+  ],
   "author": "",
   "license": "MIT",
   "bin": {

@@ -28,6 +28,7 @@ const sleep = promisify(setTimeout);
 
 sade("watchapp [range]", true)
     .option("--delay, -d [value]", "FS.watcher delay", 200)
+    .option("--entry, -e", "overwrite the default entry file (package.main)", null)
     .example("watchapp myapp.js -d 500")
     .version(VERSION)
     .action(main)
@@ -100,21 +101,18 @@ function close() {
  * @returns {Promise<void>}
  */
 async function main(range = ".*", options) {
-    const { delay } = options;
+    const { delay, entry } = options;
 
     console.log(white().bold(`\n[${TITLE}] ${green().bold(VERSION)}`));
     console.log(white().bold(`[${TITLE}] watching: ${yellow().bold(range)}`));
 
-    const mainFile = getPackageMain();
+    const mainFile = typeof entry === "string" ? entry : getPackageMain();
     if (mainFile === null) {
         console.error(red().bold("Unable to found 'main' field in your local package.json"));
         process.exit(0);
     }
 
-    const relName = relative(CWD, range);
-    const isGlobalWatch = ROOTSYMBOLS.has(relName);
-    const dirToWatch = isGlobalWatch ? process.cwd() : relName;
-    if (isGlobalWatch && normalize(dirname(mainFile)) === "bin") {
+    if (normalize(dirname(mainFile)) === "bin") {
         console.error(red().bold("Unable to watch a binary"));
         process.exit(0);
     }
@@ -128,6 +126,8 @@ async function main(range = ".*", options) {
         close();
     }
 
+    const relName = relative(CWD, range);
+    const dirToWatch = ROOTSYMBOLS.has(relName) ? process.cwd() : relName;
     watcher = watch(dirToWatch, { recursive: true, delay, filter }, async() => {
         try {
             await startProcess(mainFile);
