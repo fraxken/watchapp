@@ -1,0 +1,33 @@
+{
+  "name": "watchapp",
+  "version": "1.0.0",
+  "description": "Watch and restart your application (light alternative to nodemon for Node.js only)",
+  "main": "./bin/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fraxken/watchapp.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bin": {
+    "watchapp": "./bin/index.js"
+  },
+  "bugs": {
+    "url": "https://github.com/fraxken/watchapp/issues"
+  },
+  "homepage": "https://github.com/fraxken/watchapp#readme",
+  "dependencies": {
+    "cross-spawn": "^6.0.5",
+    "kleur": "^3.0.3",
+    "make-promises-safe": "^5.0.0",
+    "node-watch": "^0.6.3",
+    "sade": "^1.6.1"
+  },
+  "devDependencies": {
+    "@slimio/eslint-config": "^3.0.3"
+  }
+}

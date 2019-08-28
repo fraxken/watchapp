@@ -1,0 +1,7 @@
+{
+    "extends": "@slimio/eslint-config",
+    "rules": {
+        "require-atomic-updates": "off",
+        "jsdoc/required-jsdoc": "off"
+    }
+}
