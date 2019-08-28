@@ -1,5 +1,5 @@
 {
-  "name": "watchapp",
+  "name": "watch-my-app",
   "version": "1.0.0",
   "description": "Watch and restart your application (light alternative to nodemon for Node.js only)",
   "main": "./bin/index.js",

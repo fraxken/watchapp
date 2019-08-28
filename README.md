@@ -1,4 +1,4 @@
-# Watchapp
+# Watch my app
 
 ![ver](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/fraxken/watchapp/master/package.json&query=$.version&label=Version)
 ![MIT](https://img.shields.io/github/license/mashape/apistatus.svg)
@@ -19,9 +19,9 @@ Watch and restart your Node.js application.
 This package is available in the Node Package Repository and can be easily installed with [npm](https://docs.npmjs.com/getting-started/what-is-npm) or [yarn](https://yarnpkg.com).
 
 ```bash
-$ npm install watchapp -g
+$ npm install watch-my-app -g
 # or
-$ npx watchapp
+$ npx watch-my-app
 ```
 
 ## Usage example
