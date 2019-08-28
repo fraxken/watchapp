@@ -64,7 +64,7 @@ async function startProcess(mainFile) {
     cp = crossSpawn(process.argv[0], [mainFile], { stdio: "inherit" });
     cp.once("error", () => close());
     cp.once("close", (code) => {
-        if (code !== 0 && code !== 3221225786) {
+        if (code !== 0) {
             const str = `\n[${red().bold("watchapp")}] Node.js process has been closed with code '${yellow().bold(code)}'`;
             console.log(white().bold(str));
             close();
@@ -104,7 +104,7 @@ function close() {
  * @param {object} [options] command options
  * @returns {Promise<void>}
  */
-async function main(range = ".*", options) {
+async function main(range = process.cwd(), options) {
     const { delay, entry } = options;
     console.log(white().bold(`\n[${TITLE}] ${green().bold(VERSION)}`));
 
@@ -129,7 +129,10 @@ async function main(range = ".*", options) {
     }
 
     const isValidPath = isGlob(range) === false;
-    const dirToWatch = isValidPath ? relative(CWD, range) : process.cwd();
+    let dirToWatch = isValidPath ? relative(CWD, range) : process.cwd();
+    if (dirToWatch.trim() === "") {
+        dirToWatch = process.cwd();
+    }
     const expr = globalRex(range);
 
     console.log(white().bold(`[${TITLE}] watching: ${yellow().bold(dirToWatch)}`));
