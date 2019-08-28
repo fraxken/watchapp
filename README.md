@@ -1,4 +1,8 @@
 # Watchapp
+
+![ver](https://img.shields.io/badge/dynamic/json.svg?url=https://raw.githubusercontent.com/fraxken/watchapp/master/package.json&query=$.version&label=Version)
+![MIT](https://img.shields.io/github/license/mashape/apistatus.svg)
+
 Watch and restart your Node.js application.
 
 <p align="center">
