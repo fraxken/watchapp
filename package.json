@@ -11,18 +11,18 @@
     "url": "git+https://github.com/fraxken/watchapp.git"
   },
   "keywords": [
-      "watch",
-      "app",
-      "restart",
-      "reload",
-      "hot",
-      "autoreload",
-      "monitor",
-      "dev",
-      "terminal"
+    "watch",
+    "app",
+    "restart",
+    "reload",
+    "hot",
+    "autoreload",
+    "monitor",
+    "dev",
+    "terminal"
   ],
   "files": [
-      "bin/index.js"
+    "bin/index.js"
   ],
   "author": "GENTILHOMME Thomas <gentilhomme.thomas@gmail.com>",
   "license": "MIT",
@@ -35,6 +35,8 @@
   "homepage": "https://github.com/fraxken/watchapp#readme",
   "dependencies": {
     "cross-spawn": "^6.0.5",
+    "globrex": "^0.1.2",
+    "is-glob": "^4.0.1",
     "kleur": "^3.0.3",
     "make-promises-safe": "^5.0.0",
     "node-watch": "^0.6.3",

@@ -13,12 +13,13 @@ const sade = require("sade");
 const { white, red, yellow, cyan, green } = require("kleur");
 const watch = require("node-watch");
 const crossSpawn = require("cross-spawn");
+const isGlob = require("is-glob");
+const globalRex = require("globrex");
 
 // CONSTANTS
 const CWD = process.cwd();
 const VERSION = "0.1.0";
 const TITLE = cyan().bold("watchapp");
-const ROOTSYMBOLS = new Set(["*", ".", ".*", "/"]);
 const EXCLUDE = ["node_modules", "coverage", ".nyc_output"];
 
 // Vars
@@ -47,17 +48,6 @@ function getPackageMain() {
 }
 
 /**
- * @function filter
- * @param {!string} name file name
- * @returns {boolean}
- */
-function filter(name) {
-    const rel = relative(CWD, name);
-
-    return EXCLUDE.some((value) => rel.startsWith(value)) === false;
-}
-
-/**
  * @async
  * @function startProcess
  * @param {!string} mainFile
@@ -74,7 +64,7 @@ async function startProcess(mainFile) {
     cp = crossSpawn(process.argv[0], [mainFile], { stdio: "inherit" });
     cp.once("error", () => close());
     cp.once("close", (code) => {
-        if (code !== 0) {
+        if (code !== 0 && code !== 3221225786) {
             const str = `\n[${red().bold("watchapp")}] Node.js process has been closed with code '${yellow().bold(code)}'`;
             console.log(white().bold(str));
             close();
@@ -116,9 +106,7 @@ function close() {
  */
 async function main(range = ".*", options) {
     const { delay, entry } = options;
-
     console.log(white().bold(`\n[${TITLE}] ${green().bold(VERSION)}`));
-    console.log(white().bold(`[${TITLE}] watching: ${yellow().bold(range)}`));
 
     const mainFile = typeof entry === "string" ? entry : getPackageMain();
     if (mainFile === null) {
@@ -140,8 +128,24 @@ async function main(range = ".*", options) {
         close();
     }
 
-    const relName = relative(CWD, range);
-    const dirToWatch = ROOTSYMBOLS.has(relName) ? process.cwd() : relName;
+    const isValidPath = isGlob(range) === false;
+    const dirToWatch = isValidPath ? relative(CWD, range) : process.cwd();
+    const expr = globalRex(range);
+
+    console.log(white().bold(`[${TITLE}] watching: ${yellow().bold(dirToWatch)}`));
+    if (!isValidPath) {
+        console.log(white().bold(`[${TITLE}] filtrer enabled with following RegEx: ${cyan().bold(expr.regex.toString())}`));
+    }
+
+    function filter(name) {
+        const rel = relative(CWD, name);
+
+        if (!isValidPath && !expr.regex.test(name)) {
+            return false;
+        }
+
+        return EXCLUDE.some((value) => rel.startsWith(value)) === false;
+    }
     watcher = watch(dirToWatch, { recursive: true, delay, filter }, async() => {
         try {
             await startProcess(mainFile);
