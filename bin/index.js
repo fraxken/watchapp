@@ -24,6 +24,7 @@ const EXCLUDE = ["node_modules", "coverage", ".nyc_output"];
 // Vars
 let cp = null;
 let watcher = null;
+let isClosed = false;
 const sleep = promisify(setTimeout);
 
 sade("watchapp [range]", true)
@@ -73,7 +74,9 @@ async function startProcess(mainFile) {
     cp = crossSpawn(process.argv[0], [mainFile], { stdio: "inherit" });
     cp.once("error", () => close());
     cp.once("close", (code) => {
-        if (code === 1) {
+        if (code !== 0) {
+            const str = `\n[${red().bold("watchapp")}] Node.js process has been closed with code '${yellow().bold(code)}'`;
+            console.log(white().bold(str));
             close();
         }
     });
@@ -84,12 +87,23 @@ async function startProcess(mainFile) {
  * @returns {void}
  */
 function close() {
-    console.log(white().bold(`[${TITLE}] finishing... bye bye !`));
+    if (isClosed) {
+        return;
+    }
+    isClosed = true;
+
     if (watcher !== null) {
         watcher.close();
+        watcher = null;
     }
     if (cp !== null) {
+        cp.once("close", () => {
+            setImmediate(() => {
+                console.log(white().bold(`[${TITLE}] closing process...`));
+            });
+        });
         cp.kill();
+        cp = null;
     }
 }
 
