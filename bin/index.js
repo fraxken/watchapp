@@ -18,7 +18,7 @@ const globalRex = require("globrex");
 
 // CONSTANTS
 const CWD = process.cwd();
-const VERSION = "0.1.0";
+const VERSION = "1.2.0";
 const TITLE = cyan().bold("watchapp");
 const EXCLUDE = ["node_modules", "coverage", ".nyc_output"];
 
