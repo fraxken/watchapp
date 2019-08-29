@@ -32,6 +32,7 @@ sade("watchapp [range]", true)
     .option("--delay, -d [value]", "FS.watcher delay in milliseconds", 200)
     .option("--entry, -e", "overwrite the default entry file (package.main)", null)
     .option("--script, -s", "script to run before the child process", null)
+    .option("--exclude, -x", "exclude given list of directories/files from the watcher", "")
     .example("watchapp myapp.js -d 500")
     .version(VERSION)
     .action(main)
@@ -106,8 +107,14 @@ function close() {
  * @returns {Promise<void>}
  */
 async function main(range = process.cwd(), options) {
-    const { delay, entry, script } = options;
+    const { delay, entry, script, exclude = "" } = options;
     console.log(white().bold(`\n[${TITLE}] ${green().bold(VERSION)}`));
+
+    // Add new list of files to EXCLUDE constants
+    if (typeof exclude === "string" && exclude.trim() !== "") {
+        const fList = new Set(exclude.split(",").map((value) => relative(CWD, value)));
+        EXCLUDE.push(...[...fList]);
+    }
 
     const mainFile = typeof entry === "string" ? entry : getPackageMain();
     if (mainFile === null) {
