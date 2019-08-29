@@ -17,7 +17,7 @@ const isGlob = require("is-glob");
 
 // CONSTANTS
 const CWD = process.cwd();
-const VERSION = "1.2.0";
+const VERSION = "1.3.0";
 const TITLE = cyan().bold("watchapp");
 const EXCLUDE = ["node_modules", "coverage", ".nyc_output"];
 
