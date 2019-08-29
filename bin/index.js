@@ -30,10 +30,11 @@ const sleep = promisify(setTimeout);
 
 sade("watchapp [range]", true)
     .option("--delay, -d [value]", "FS.watcher delay in milliseconds", 200)
-    .option("--entry, -e", "overwrite the default entry file (package.main)", null)
-    .option("--script, -s", "script to run before the child process", null)
-    .option("--exclude, -x", "exclude given list of directories/files from the watcher", "")
-    .example("watchapp myapp.js -d 500")
+    .option("--entry, -e", "overwrite the default entry file (package.json main field)", null)
+    .option("--script, -s", "'npm' script --> name <-- to run before the child process", null)
+    .option("--exclude, -x", "exclude a given list of directories/files from the watcher (separated with commas)", "")
+    .example("myapp.js -d 500")
+    .example("'.*.json|.*.ts|.*.html' -s build -x build,views")
     .version(VERSION)
     .action(main)
     .parse(process.argv);

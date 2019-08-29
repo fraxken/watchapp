@@ -38,5 +38,10 @@ By default watchapp will read your local **package.json** and search for the `ma
 $ watchapp -e ./server.js
 ```
 
+For more options just run with `--help`
+```bash
+$ watchapp --help
+```
+
 ## License
 MIT
