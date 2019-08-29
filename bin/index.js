@@ -33,7 +33,7 @@ sade("watchapp [range]", true)
     .option("--script, -s", "'npm' script --> name <-- to run before the child process", null)
     .option("--exclude, -x", "exclude a given list of directories/files from the watcher (separated with commas)", "")
     .example("myapp.js -d 500")
-    .example("'.*.json|.*.ts|.*.html' -s build -x build,views")
+    .example("'.*\\.(json|html|ts)' -s build -x build,views")
     .version(VERSION)
     .action(main)
     .parse(process.argv);
