@@ -14,7 +14,6 @@ const { white, red, yellow, cyan, green } = require("kleur");
 const watch = require("node-watch");
 const crossSpawn = require("cross-spawn");
 const isGlob = require("is-glob");
-const globalRex = require("globrex");
 
 // CONSTANTS
 const CWD = process.cwd();
@@ -145,17 +144,25 @@ async function main(range = process.cwd(), options) {
     if (dirToWatch.trim() === "") {
         dirToWatch = process.cwd();
     }
-    const expr = globalRex(range);
+    let expr;
+
+    try {
+        expr = new RegExp(range, "g");
+    }
+    catch (error) {
+        console.log(red().bold(error.message));
+        process.exit(0);
+    }
 
     console.log(white().bold(`[${TITLE}] watching: ${yellow().bold(dirToWatch)}`));
     if (!isValidPath) {
-        console.log(white().bold(`[${TITLE}] filtrer enabled with following RegEx: ${cyan().bold(expr.regex.toString())}`));
+        console.log(white().bold(`[${TITLE}] filtrer enabled with following RegEx: ${cyan().bold(expr.toString())}`));
     }
 
     function filter(name) {
         const rel = relative(CWD, name);
 
-        if (!isValidPath && !expr.regex.test(name)) {
+        if (!isValidPath && !expr.test(name)) {
             return false;
         }
 
