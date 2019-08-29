@@ -31,6 +31,7 @@ const sleep = promisify(setTimeout);
 sade("watchapp [range]", true)
     .option("--delay, -d [value]", "FS.watcher delay in milliseconds", 200)
     .option("--entry, -e", "overwrite the default entry file (package.main)", null)
+    .option("--script, -s", "script to run before the child process", null)
     .example("watchapp myapp.js -d 500")
     .version(VERSION)
     .action(main)
@@ -105,7 +106,7 @@ function close() {
  * @returns {Promise<void>}
  */
 async function main(range = process.cwd(), options) {
-    const { delay, entry } = options;
+    const { delay, entry, script } = options;
     console.log(white().bold(`\n[${TITLE}] ${green().bold(VERSION)}`));
 
     const mainFile = typeof entry === "string" ? entry : getPackageMain();
@@ -120,6 +121,9 @@ async function main(range = process.cwd(), options) {
     }
 
     try {
+        if (typeof script === "string") {
+            crossSpawn.sync("npm", ["run", script], { stdio: "inherit" });
+        }
         await startProcess(mainFile);
     }
     catch (error) {
@@ -151,6 +155,9 @@ async function main(range = process.cwd(), options) {
     }
     watcher = watch(dirToWatch, { recursive: true, delay, filter }, async() => {
         try {
+            if (typeof script === "string") {
+                crossSpawn.sync("npm", ["run", script], { stdio: "inherit" });
+            }
             await startProcess(mainFile);
         }
         catch (error) {
