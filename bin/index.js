@@ -29,7 +29,7 @@ let isClosed = false;
 const sleep = promisify(setTimeout);
 
 sade("watchapp [range]", true)
-    .option("--delay, -d [value]", "FS.watcher delay", 200)
+    .option("--delay, -d [value]", "FS.watcher delay in milliseconds", 200)
     .option("--entry, -e", "overwrite the default entry file (package.main)", null)
     .example("watchapp myapp.js -d 500")
     .version(VERSION)
