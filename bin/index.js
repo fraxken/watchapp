@@ -65,7 +65,7 @@ async function startProcess(mainFile) {
     cp = crossSpawn(process.argv[0], [mainFile], { stdio: "inherit" });
     cp.once("error", () => close());
     cp.once("close", (code) => {
-        if (code !== 0) {
+        if (code !== 0 && code !== null) {
             const str = `\n[${red().bold("watchapp")}] Node.js process has been closed with code '${yellow().bold(code)}'`;
             console.log(white().bold(str));
             close();
